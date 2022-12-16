@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: h5ai-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - share.example.com
+    secretName: h5ai-ingress-tls
+  rules:
+  - host: share.example.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: h5ai
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

@@ -1,0 +1,6 @@
+kind: ConfigMap
+metadata:
+  name: nginx-ingress-tcp-microk8s-conf
+  namespace: ingress
+data:
+  22: "default/gitlab:22"

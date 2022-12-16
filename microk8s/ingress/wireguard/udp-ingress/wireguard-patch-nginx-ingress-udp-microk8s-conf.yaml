@@ -1,0 +1,6 @@
+kind: ConfigMap
+metadata:
+  name: nginx-ingress-udp-microk8s-conf
+  namespace: ingress
+data:
+  51820: "default/wireguard:51820"

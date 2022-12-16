@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wireguard
+spec:
+  selector:
+    app: wireguard
+  ports:
+  - port: 51820
+    protocol: UDP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wireguard
+  labels:
+    app: wireguard
+spec:
+  selector:
+    matchLabels:
+      app: wireguard
+  template:
+    metadata:
+      labels:
+        app: wireguard
+    spec:
+      securityContext:
+        sysctls:
+        - name: net.ipv4.conf.all.src_valid_mark
+          value: "1"
+        - name: net.ipv4.ip_forward
+          value: "1"
+      containers:
+      - name: wireguard
+        image: lscr.io/linuxserver/wireguard:latest
+        envFrom:
+        - configMapRef:
+            name: wireguard
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - SYS_MODULE
+        volumeMounts:
+        - name: wg-config
+          mountPath: /config
+        - name: modules-volumes
+          mountPath: /lib/modules
+        ports:
+        - containerPort: 51820
+          protocol: UDP
+      volumes:
+      - name: wg-config
+        hostPath:
+          path: /srv/wireguard/config
+          type: Directory
+      - name: modules-volumes
+        hostPath:
+          path: /lib/modules
+          type: Directory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wireguard
+data:
+  PUID: "1000"
+  PGID: "1000"
+  SERVERURL: "example.com" 
+  SERVERPORT: "51820"
+  PEERS: "3"
+  PEERDNS: "auto"
+  INTERNAL_SUBNET: "10.13.13.0"
+  ALLOWEDIPS: "10.13.13.0/24"
+  LOG_CONFS: "false"
