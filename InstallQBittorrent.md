@@ -51,6 +51,8 @@ chown 1000:1000 /srv/qbittorrent-nox
 docker run -d \
     -v /srv/qbittorrent-nox:/home/qbittorrent-nox \
     --network host \
+    --restart always \
+    --name qbittorrent-nox \
     qbittorrent-nox
 ```
 
