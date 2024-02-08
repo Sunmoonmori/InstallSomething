@@ -1,3 +1,7 @@
+# note
+
+use official image: https://github.com/qbittorrent/docker-qbittorrent-nox
+
 # enable bbr tcp congestion control
 
 ```
@@ -5,8 +9,9 @@ echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
 sysctl -p
 ```
+# deprecated
 
-# install method 1: docker
+## install method 1: docker
 
 edit ./Dockerfile
 
@@ -56,7 +61,7 @@ docker run -d \
     qbittorrent-nox
 ```
 
-# install method 2
+## install method 2
 
 install qbittorrent
 

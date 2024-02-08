@@ -65,8 +65,17 @@ docker restart vsftpd
 + make sure the Dockerfile is LF instead of CRLF because we use `<<EOF`
     + or change the corresponding command to `echo "xxx\nxxx"` (`echo -e "xxx\nxxx"`) or `printf "xxx\nxxx"`
 + vsftpd can not exit and must be killed
-    + can be proved by `/etc/systemd/system/multi-user.target.wants/vsftpd.service`
+    + see `/etc/systemd/system/multi-user.target.wants/vsftpd.service`
 + 530 Login incorrect is because of `/etc/pam.d/vsftpd`
     + ensure `ftpuser` is not in `/etc/ftpusers` (because of the line `auth required pam_listfile.so item=user sense=deny file=/etc/ftpusers onerr=succeed`)
     + replace the line `auth required pam_shells.so` with `auth required pam_nologin.so` (because our `ftpuser` uses `/usr/sbin/nologin`)
 + if using chroot, make sure that the user does not have write access to the top level directory within the chroot
++ this image may cause crash in certain situation.
+    + my crash environment:
+        + Host OS: Linux 4.14.76-armada-18.12.3 aarch64
+        + Host Dist: Ubuntu 18.04.6 LTS
+        + Base Image: ubuntu@sha256:e9569c25505f33ff72e88b2990887c9dcf230f23259da296eb814fc2b41af999
+        + Software Version: vsftpd/jammy 3.0.5-0ubuntu1 arm64 (installed by apt)
+    + will crash when visiting using nPlayer Android 1.8.0.5_230911
+    + will not crash when visiting using WinSCP
+    + will not crash when not using docker
