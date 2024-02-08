@@ -63,7 +63,7 @@ docker restart vsftpd
 # note
 
 + make sure the Dockerfile is LF instead of CRLF because we use `<<EOF`
-    + or change the corresponding command to `echo "xxx\nxxx"` or `printf "xxx\nxxx"`
+    + or change the corresponding command to `echo "xxx\nxxx"` (`echo -e "xxx\nxxx"`) or `printf "xxx\nxxx"`
 + vsftpd can not exit and must be killed
     + can be proved by `/etc/systemd/system/multi-user.target.wants/vsftpd.service`
 + 530 Login incorrect is because of `/etc/pam.d/vsftpd`
